@@ -2,7 +2,7 @@
    <div class="login_container">
        <div class="login_box">
            <div class="vue-logo">
-               <img src="../assets/logo.png" alt="">
+               <img src="../assets/img/logo.png" alt="">
            </div>
            <!-- 登录表单区域 -->
           <el-form :model="LoginForm" ref="LoginFormRef" :rules="LoginFormRules" class="login-form">
@@ -64,7 +64,7 @@ export default {
                         type: 'error'
                      });
                 }
-                this.$message.success('登录成功');
+               this.$message.success('登录成功');
                //登录成功之后的token,保存在客户端的sessionStorage中
                window.sessionStorage.setItem('token',res.data.token);
                //通过编程式导航跳转到后台主页，路由地址是 /home
