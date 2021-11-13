@@ -102,7 +102,6 @@ export default {
 }
 .el-aside,.el-menu{background: #333744;}
 .el-menu{border:none;}
-.el-main{}
 .home-container{height: 100%;}
 .el-submenu__title span,.el-menu-item{color:#fff;}
 .iconfont{margin-right: 5px;}

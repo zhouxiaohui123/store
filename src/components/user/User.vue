@@ -19,7 +19,7 @@
           </el-row>
           <!-- 用户数据列表 -->
           <el-table :data="tableData" border stripe borderstyle="width: 100%" >
-            <el-table-column type="index">#</el-table-column>
+            <el-table-column type="index"></el-table-column>
             <el-table-column label="姓名" prop="username" width="180"></el-table-column>
             <el-table-column label="邮箱" prop="email"></el-table-column>
             <el-table-column label="电话" prop="mobile"></el-table-column>
@@ -37,7 +37,7 @@
                     <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUserItem(scope.row.id)"></el-button>
                     <!-- 分配角色按钮 -->
                     <el-tooltip content="分配角色" placement="top" :enterable="false">
-                        <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+                        <el-button type="warning" icon="el-icon-setting" size="mini" @click="setRoleDialog(scope.row)"></el-button>
                     </el-tooltip>
                  </template>
             </el-table-column>
@@ -104,18 +104,27 @@
                 <el-button @click="editordialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="editorUser">确 定</el-button>
             </span>
-        </el-dialog>
-     
+        </el-dialog>     
         
-    
-
-
-
-
+          <!-- 分配角色对话框 -->
+        <el-dialog title="分配角色"  :visible.sync="setRoleVisible"  width="30%" @close="setRoleClosed">
+           <p>姓名：{{this.currRoleInfo.username}}</p>
+           <p>当前角色：{{this.currRoleInfo.role_name}}</p>
+           <p>分配新角色：
+                <el-select v-model="rolesListSelected" placeholder="请选择">
+                    <el-option  v-for="item in rolesList"   :key="item.id"
+                    :label="item.roleName"  :value="item.id">
+                    </el-option>
+                </el-select>         
+          </p> 
+           <span slot="footer" class="dialog-footer">
+                <el-button @click="setRoleVisible = false">取 消</el-button>
+                <el-button type="primary" @click="setRole">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
-import people from './childComp/People.vue'
 export default {
     data(){
         //自定义邮箱校验规则
@@ -146,6 +155,7 @@ export default {
             addialogVisible: false, //添加用户对话框
             editordialogVisible:false,//修改用户对话框
             deletedialogVisible:false,//删除用户对话框
+            setRoleVisible:false,//分配用户角色对话框
             //添加用户表单数据源 
             addForm:{
                 username:'',
@@ -182,10 +192,14 @@ export default {
             //修改用户表单验证规则
             editorFormRules:{
                 
-            }
+            },
+            //当前角色信息 
+            currRoleInfo:{ },
+            //所有角色数据源
+            rolesList:[],
+            rolesListSelected:'' //已被选中的角色id
         }
     },
-    components:{people},
     created(){
         this.getUserList();
     },
@@ -282,10 +296,34 @@ export default {
                 this.getUserList();
              }
         },
-        //点击按钮，删除用户信息 
-        // deleteUser(){
-
-        // }
+        //点击按钮，给用户分配角色
+        async setRoleDialog(node){
+            this.setRoleVisible = true;
+            this.currRoleInfo = node;
+            //获取所有角色
+            const {data:res} = await this.$http.get('roles');
+            if(res.meta.status !== 200){
+                return this.$message.error(res.meta.msg);
+            }
+            this.rolesList = res.data;
+       
+            
+        },
+        setRoleClosed(){
+            this.rolesListSelected = '';
+        },
+        async setRole(){
+           const {data:res} = await this.$http.put(`users/${this.currRoleInfo.id}/role`,{rid:this.rolesListSelected});
+           if(res.meta.status !==200){
+               return this.$message.error(res.meta.msg);
+           }
+           this.$message.success('设置角色成功！');
+           this.setRoleVisible = false;
+           //res.data.rid
+           //console.log('角色id',res.data);
+           //console.log(this.rolesList);
+            this.getUserList();
+        }
     }
 }
 </script>
