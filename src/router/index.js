@@ -9,13 +9,14 @@ import Rights from '../components/rights/rights.vue'
 import Goods from '../components/goods/Goods.vue'
 import Categories from '../components/goods/Categories.vue'
 import Params from '../components/goods/Params.vue'
+import AddGoods from '../components/goods/Add.vue'
 
 Vue.use(Router)
 
 const router = new Router({
   routes: [
     { path:'/',redirect:'/Login'},
-    { path:'/login',component:Login},
+    { path:'/login',component:Login},  
     { 
       path:'/home',
       component:Home,
@@ -27,7 +28,8 @@ const router = new Router({
         {path:'/rights',component:Rights},
         {path:'/goods',component:Goods},
         {path:'/categories',component:Categories},
-        {path:'/params',component:Params}
+        {path:'/params',component:Params},
+        {path:'/add',component:AddGoods},
       ]
     }
    ]
