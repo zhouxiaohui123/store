@@ -30,7 +30,8 @@
                 </el-table-column>
                 <el-table-column label="操作" prop="" width="200px">
                     <template v-slot="scope">
-                        <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+                        <!-- :to="{ path: '/home' }" -->
+                        <el-button type="primary" icon="el-icon-edit" size="mini" @click="goEditpage(scope.row.goods_id)">编辑</el-button>
                         <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteGoods(scope.row.goods_id)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -102,6 +103,10 @@ export default {
         //点击""添加商品"按钮，跳转到添加页
         goAddpage(){
             this.$router.push('/add')
+        },
+        goEditpage(id){
+            //this.$router.push('/add')
+            this.$router.push(`/edit/${id}`)
         }
     }, 
     //过滤器
