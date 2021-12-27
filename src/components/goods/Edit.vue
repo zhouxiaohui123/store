@@ -1,6 +1,13 @@
 <template>
     <div>
         <el-card>
+            <el-steps :active="activeIndex - 0" finish-status="success"  align-center>
+                <el-step title="基本信息"></el-step>
+                <el-step title="商品参数"></el-step>
+                <el-step title="商品属性"></el-step>
+                <el-step title="商品图片"></el-step>
+                <el-step title="商品内容"></el-step>
+            </el-steps>
               <el-form :model="eidtgoodInfo" ref="eidtgoodInfoRef" :rules="eidtgoodInfoRules" label-position="top" >
                 <el-tabs v-model="activeIndex"  tab-position="left" :before-leave="beforeLeave" @tab-click="tabClick">
                     <el-tab-pane label="基本信息" name="0">
